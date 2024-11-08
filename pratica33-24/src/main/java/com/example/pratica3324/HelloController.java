@@ -63,9 +63,10 @@ public class HelloController {
             Button b1=new Button("Inserisci");
             insertBox.getChildren().add(b1);
             b1.setOnMouseClicked( e -> {
-                if (isStraniero(cStraniero))
-                    sq.setIndexInseriti(sq.aggGiocStraniero(t1.getText(), Integer.parseInt(t2.getText()), isCapitano(c1),tStraniero.getText()));
-                else
+                if (isStraniero(cStraniero)) {
+                    System.out.println(isStraniero(cStraniero));
+                    sq.setIndexInseriti(sq.aggGiocStraniero(t1.getText(), Integer.parseInt(t2.getText()), isCapitano(c1), tStraniero.getText()));
+                }else
                     sq.setIndexInseriti(sq.aggGioc(t1.getText(), Integer.parseInt(t2.getText()), isCapitano(c1)));
                 insertBox.getChildren().clear();
                 labelIn.setText("INSERITO CORRETTAMENTE");
@@ -83,7 +84,7 @@ public class HelloController {
 
     @FXML
     public boolean isStraniero(Button cStraniero){
-        return insertBox.getChildren().contains(cStraniero);
+        return !insertBox.getChildren().contains(cStraniero);
     }
 
     @FXML
@@ -107,8 +108,8 @@ public class HelloController {
             labelIn.setStyle("-fx-text-fill: #FB0008");
             labelIn.setText("ERRORE : Nessun giocatore ancora inserito.");
         } else {
-            //Ricerca giocatore
-
+                //Ricerca giocatore
+                Button cStraniero=new Button("E' straniero?");
                 CheckBox c1=new CheckBox("<--");
 
                 labelIn.setStyle("-fx-text-fill: #0a0a0a");
@@ -127,16 +128,32 @@ public class HelloController {
                 insertBox.getChildren().add(t2);
 
                 //Inserimento valori
-                if (sq.controllaCapitani() != -1) {
+                if (sq.controllaCapitani() != -1) { //Quindi se c'è un capitano altrimenti è inutile chiederlo no?
                     Label l3=new Label("E' capitano?");
                     insertBox.getChildren().add(l3);
                     insertBox.getChildren().add(c1);
                 }
+
+                Label lStraniero=new Label("Inserire la nazionalità del giocatore:");
+                TextField tStraniero=new TextField();
+
+                insertBox.getChildren().add(cStraniero);
+                //Se straniero
+                cStraniero.setOnMouseClicked( e -> {
+                    insertBox.getChildren().remove(cStraniero);
+                    insertBox.getChildren().add(lStraniero);
+                    insertBox.getChildren().add(tStraniero);
+                });
+
                 //Bottone finale
                 Button b1=new Button("Ricerca");
                 insertBox.getChildren().add(b1);
                 b1.setOnMouseClicked( e -> { //All'azione
-                    i=sq.ricercaGioc(t1.getText(), Integer.parseInt(t2.getText()), isCapitano(c1));
+                    if (isStraniero(cStraniero))
+                        i=sq.ricercaGioc(new GiocatoreStraniero(t1.getText(), isCapitano(c1), Integer.parseInt(t2.getText()),tStraniero.getText()));
+                    else
+                        i=sq.ricercaGioc(new Giocatore(t1.getText(), isCapitano(c1), Integer.parseInt(t2.getText())));
+                    System.out.println(isStraniero(cStraniero));
                     if (i==-1) {
                         insertBox.getChildren().clear();
                         labelIn.setStyle("-fx-text-fill: #FB0008");
@@ -160,16 +177,33 @@ public class HelloController {
                         insertBox.getChildren().add(t21);
 
                         //Inserimento valori
-                        if (sq.controllaCapitani() == -1 || sq.isCapitanoSingolo(sq.ricercaGioc(t1.getText(), Integer.parseInt(t2.getText()), isCapitano(c1)))) {
+                            //Cotrollo se è un capitano o no
+                        boolean controlloCapitano;
+                        if (isStraniero(cStraniero))
+                            controlloCapitano=sq.isCapitanoSingolo(sq.ricercaGioc(new GiocatoreStraniero(t1.getText(), isCapitano(c1), Integer.parseInt(t2.getText()),tStraniero.getText())));
+                        else
+                            controlloCapitano=sq.isCapitanoSingolo(sq.ricercaGioc(new Giocatore(t1.getText(), isCapitano(c1))));
+
+                        //Se lo è
+                        if (sq.controllaCapitani() == -1 || controlloCapitano) {
                             Label l3=new Label("E' capitano?");
                             insertBox.getChildren().add(l3);
                             insertBox.getChildren().add(c2);
+                        }
+
+                        Label l2Straniero=new Label("Inserire la nazionalità del giocatore:");
+                        TextField t2Straniero=new TextField();
+                        if (isStraniero(cStraniero)){
+                            insertBox.getChildren().addAll(l2Straniero,t2Straniero);
                         }
                         //Bottone finale
                         Button b2=new Button("Conferma");
                         insertBox.getChildren().add(b2);
                         b2.setOnMouseClicked( b -> { //All'azione
-                            sq.modificaGioc(i, t11.getText(), Integer.parseInt(t21.getText()), isCapitano(c2));
+                            if (isStraniero(cStraniero))
+                                sq.modificaGioc(new GiocatoreStraniero(t11.getText(), isCapitano(c2), Integer.parseInt(t21.getText()),t2Straniero.getText()),i);
+                            else
+                                sq.modificaGioc(new Giocatore(t11.getText(), isCapitano(c2), Integer.parseInt(t21.getText())),i);
                             insertBox.getChildren().clear();
                             labelIn.setText("MODIFICA DEL GIOCATORE EFFETTUATA");
                         });
@@ -186,6 +220,7 @@ public class HelloController {
         } else {
             //Ricerca giocatore
             CheckBox c1=new CheckBox("<--");
+            Button cStraniero=new Button("E' straniero?");
             labelIn.setStyle("-fx-text-fill: #0a0a0a");
             labelIn.setText("CANCELLAZIONE:");
 
@@ -208,11 +243,26 @@ public class HelloController {
                 insertBox.getChildren().add(l3);
                 insertBox.getChildren().add(c1);
             }
+            Label lStraniero=new Label("Inserire la nazionalità del giocatore:");
+            TextField tStraniero=new TextField();
+
+            insertBox.getChildren().add(cStraniero);
+            //Se straniero
+            cStraniero.setOnMouseClicked( e -> {
+                insertBox.getChildren().remove(cStraniero);
+                insertBox.getChildren().add(lStraniero);
+                insertBox.getChildren().add(tStraniero);
+            });
+
             //Bottone finale
             Button b1=new Button("Cerca");
             insertBox.getChildren().add(b1);
             b1.setOnMouseClicked( e -> { //All'azione
-                i= sq.ricercaGioc(t1.getText(), Integer.parseInt(t2.getText()), isCapitano(c1));
+                if (isStraniero(cStraniero))
+                    i=sq.ricercaGioc(new GiocatoreStraniero(t1.getText(), isCapitano(c1), Integer.parseInt(t2.getText()),tStraniero.getText()));
+                else
+                    i=sq.ricercaGioc(new Giocatore(t1.getText(), isCapitano(c1), Integer.parseInt(t2.getText())));
+
                 insertBox.getChildren().clear();
                 if (i==-1) {
                     insertBox.getChildren().clear();
@@ -273,7 +323,7 @@ public class HelloController {
             if (i==-1)
                 l1.setText("Non ci sono capitani");
             else
-                l1.setText(sq.toStringSingolo(i));
+                l1.setText(sq.toString(i));
         }
     }
     @FXML
@@ -294,7 +344,7 @@ public class HelloController {
                 l1.setText("Ci sono già capitani");
             else
                 l1.setText("Capitano nuovo:");
-            l2.setText(sq.toStringSingolo(sq.controllaCapitani()));
+            l2.setText(sq.toString(sq.controllaCapitani()));
         }
     }
 }

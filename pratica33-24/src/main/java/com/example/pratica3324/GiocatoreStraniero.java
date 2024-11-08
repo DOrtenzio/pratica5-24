@@ -15,7 +15,7 @@ public class GiocatoreStraniero extends Giocatore{
 
     //To string
     public String toString() {
-        return "GIOCATORE:\t Nome "+getNome()+" Gol: "+getNome()+" E' Capitano? "+isCapitano()+" Nazionalità: "+getNazionalita();
+        return "GIOCATORE:\t Nome "+getNome()+"\t Gol: "+getGoal()+"\t E' Capitano? "+isCapitano()+"\t Nazionalità: "+getNazionalita();
     }
 
     //Equals

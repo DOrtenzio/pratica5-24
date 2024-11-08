@@ -19,8 +19,8 @@ public class Squadra {
     public boolean isCapitanoSingolo(int indice) { return this.squadra[indice].isCapitano(); }
 
     //Metodi
-    public String toStringSingolo(int indice) {
-        return "Nome: "+this.squadra[indice].getNome()+"\t Capitano:"+this.squadra[indice].isCapitano()+"\t Gol:"+this.squadra[indice].getGoal();
+    public String toString(int indice) {
+        return this.squadra[indice].toString();
     }
 
     public int aggGioc(String nome, int gol, boolean capitano) {
@@ -35,24 +35,51 @@ public class Squadra {
     public String stampa(){
         String s="Squadra: \n";
         for (int i=0;i<this.indexInseriti;i++){
-            s=s+"\nNome: "+this.squadra[i].getNome()+"\t Capitano:"+this.squadra[i].isCapitano()+"\t Gol:"+this.squadra[i].getGoal();
+            s=s+this.squadra[i].toString()+"\n";
         }
         s=s+"\n----------";
         return s;
     }
 
-    public int ricercaGioc(String nome, int gol, boolean capitano){
-        for (int i=0;i<this.indexInseriti;i++){
-            if ( this.squadra[i].getNome().equalsIgnoreCase(nome) && this.squadra[i].getGoal()==gol && this.squadra[i].isCapitano()==capitano )
-                return i;
+    public int ricercaGioc(Object obj){
+        if (obj instanceof GiocatoreStraniero) {
+            GiocatoreStraniero r = (GiocatoreStraniero) obj;
+            for (int i=0;i<this.indexInseriti;i++){
+                if (this.squadra[i] instanceof GiocatoreStraniero){
+                    if ( this.squadra[i].getNome().equalsIgnoreCase(r.getNome()) && this.squadra[i].getGoal()==r.getGoal() && this.squadra[i].isCapitano()==r.isCapitano() && r.getNazionalita().equalsIgnoreCase(((GiocatoreStraniero) this.squadra[i]).getNazionalita()) )
+                        return i;
+                }
+            }
+            return -1;
+        }else if(obj instanceof Giocatore) {
+            Giocatore r = (Giocatore) obj;
+            for (int i=0;i<this.indexInseriti;i++){
+                if ( this.squadra[i].getNome().equalsIgnoreCase(r.getNome()) && this.squadra[i].getGoal()==r.getGoal() && this.squadra[i].isCapitano()==r.isCapitano() )
+                    return i;
+            }
+            return -1;
         }
         return -1;
     }
 
-    public void modificaGioc( int indice, String nome, int gol, boolean capitano){
-        this.squadra[indice].setNome(nome);
-        this.squadra[indice].setGoal(gol);
-        this.squadra[indice].setCapitano(capitano);
+    public void modificaGioc(Object obj,int indice){
+        if (obj instanceof GiocatoreStraniero) {
+            GiocatoreStraniero r = (GiocatoreStraniero) obj;
+            GiocatoreStraniero giocatoreStraniero = (GiocatoreStraniero) (this.squadra[indice]);
+
+            giocatoreStraniero.setNome(r.getNome());
+            giocatoreStraniero.setGoal(r.getGoal());
+            giocatoreStraniero.setCapitano(r.isCapitano());
+            giocatoreStraniero.setNazionalita(r.getNazionalita());
+        }else {
+            Giocatore r = (Giocatore) obj;
+            Giocatore giocatore= this.squadra[indice];
+
+            giocatore.setNome(r.getNome());
+            giocatore.setGoal(r.getGoal());
+            giocatore.setCapitano(r.isCapitano());
+
+        }
     }
 
     public void cancellaGioc(int indice){

@@ -21,7 +21,7 @@ public class Giocatore {
 
     //To string
     public String toString() {
-        return "GIOCATORE:\t Nome "+getNome()+" Gol: "+getNome()+" E' Capitano? "+isCapitano();
+        return "GIOCATORE:\t Nome "+getNome()+"\t Gol: "+getGoal()+"\t E' Capitano? "+isCapitano();
     }
 
     //Equals
