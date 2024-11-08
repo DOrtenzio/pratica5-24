@@ -71,7 +71,7 @@ public class Squadra {
             giocatoreStraniero.setGoal(r.getGoal());
             giocatoreStraniero.setCapitano(r.isCapitano());
             giocatoreStraniero.setNazionalita(r.getNazionalita());
-        }else {
+        }else if(obj instanceof Giocatore){
             Giocatore r = (Giocatore) obj;
             Giocatore giocatore= this.squadra[indice];
 
