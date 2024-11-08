@@ -64,7 +64,6 @@ public class HelloController {
             insertBox.getChildren().add(b1);
             b1.setOnMouseClicked( e -> {
                 if (isStraniero(cStraniero)) {
-                    System.out.println(isStraniero(cStraniero));
                     sq.setIndexInseriti(sq.aggGiocStraniero(t1.getText(), Integer.parseInt(t2.getText()), isCapitano(c1), tStraniero.getText()));
                 }else
                     sq.setIndexInseriti(sq.aggGioc(t1.getText(), Integer.parseInt(t2.getText()), isCapitano(c1)));
@@ -153,7 +152,6 @@ public class HelloController {
                         i=sq.ricercaGioc(new GiocatoreStraniero(t1.getText(), isCapitano(c1), Integer.parseInt(t2.getText()),tStraniero.getText()));
                     else
                         i=sq.ricercaGioc(new Giocatore(t1.getText(), isCapitano(c1), Integer.parseInt(t2.getText())));
-                    System.out.println(isStraniero(cStraniero));
                     if (i==-1) {
                         insertBox.getChildren().clear();
                         labelIn.setStyle("-fx-text-fill: #FB0008");
@@ -162,6 +160,16 @@ public class HelloController {
                         CheckBox c2=new CheckBox("<--");
                         labelIn.setStyle("-fx-text-fill: #0a0a0a");
                         labelIn.setText("MODIFICA DEL GIOCATORE RICHIESTO:");
+
+                        //Cotrollo se è un capitano o no
+                        boolean controlloCapitano,isStraniero;
+                        if (isStraniero(cStraniero)) {
+                            controlloCapitano = sq.isCapitanoSingolo(sq.ricercaGioc(new GiocatoreStraniero(t1.getText(), isCapitano(c1), Integer.parseInt(t2.getText()), tStraniero.getText())));
+                            isStraniero=true;
+                        }else {
+                            isStraniero = false;
+                            controlloCapitano=sq.isCapitanoSingolo(sq.ricercaGioc(new Giocatore(t1.getText(),isCapitano(c1), Integer.parseInt(t2.getText()))));
+                        }
 
                         insertBox.getChildren().clear();
                         //Label e textField
@@ -177,12 +185,6 @@ public class HelloController {
                         insertBox.getChildren().add(t21);
 
                         //Inserimento valori
-                            //Cotrollo se è un capitano o no
-                        boolean controlloCapitano;
-                        if (isStraniero(cStraniero))
-                            controlloCapitano=sq.isCapitanoSingolo(sq.ricercaGioc(new GiocatoreStraniero(t1.getText(), isCapitano(c1), Integer.parseInt(t2.getText()),tStraniero.getText())));
-                        else
-                            controlloCapitano=sq.isCapitanoSingolo(sq.ricercaGioc(new Giocatore(t1.getText(), isCapitano(c1))));
 
                         //Se lo è
                         if (sq.controllaCapitani() == -1 || controlloCapitano) {
@@ -193,14 +195,14 @@ public class HelloController {
 
                         Label l2Straniero=new Label("Inserire la nazionalità del giocatore:");
                         TextField t2Straniero=new TextField();
-                        if (isStraniero(cStraniero)){
+                        if (isStraniero){
                             insertBox.getChildren().addAll(l2Straniero,t2Straniero);
                         }
                         //Bottone finale
                         Button b2=new Button("Conferma");
                         insertBox.getChildren().add(b2);
                         b2.setOnMouseClicked( b -> { //All'azione
-                            if (isStraniero(cStraniero))
+                            if (isStraniero)
                                 sq.modificaGioc(new GiocatoreStraniero(t11.getText(), isCapitano(c2), Integer.parseInt(t21.getText()),t2Straniero.getText()),i);
                             else
                                 sq.modificaGioc(new Giocatore(t11.getText(), isCapitano(c2), Integer.parseInt(t21.getText())),i);
