@@ -54,13 +54,14 @@ public class Squadra {
         }else if(obj instanceof Giocatore) {
             Giocatore r = (Giocatore) obj;
             for (int i=0;i<this.indexInseriti;i++){
-                if ( this.squadra[i].getNome().equalsIgnoreCase(r.getNome()) && this.squadra[i].getGoal()==r.getGoal() && this.squadra[i].isCapitano()==r.isCapitano() )
+                if ( !(this.squadra[i] instanceof  GiocatoreStraniero) && this.squadra[i].getNome().equalsIgnoreCase(r.getNome()) && this.squadra[i].getGoal()==r.getGoal() && this.squadra[i].isCapitano()==r.isCapitano() )
                     return i;
             }
             return -1;
         }
         return -1;
     }
+
 
     public void modificaGioc(Object obj,int indice){
         if (obj instanceof GiocatoreStraniero) {
