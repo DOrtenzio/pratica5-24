@@ -63,10 +63,10 @@ public class HelloController {
             Button b1=new Button("Inserisci");
             insertBox.getChildren().add(b1);
             b1.setOnMouseClicked( e -> {
-                if (isStraniero(cStraniero)) {
-                    sq.setIndexInseriti(sq.aggGiocStraniero(t1.getText(), Integer.parseInt(t2.getText()), isCapitano(c1), tStraniero.getText()));
-                }else
-                    sq.setIndexInseriti(sq.aggGioc(t1.getText(), Integer.parseInt(t2.getText()), isCapitano(c1)));
+                if (!insertBox.getChildren().contains(cStraniero))
+                    sq.setIndexInseriti(sq.aggGioc(new GiocatoreStraniero(t1.getText(), isCapitano(c1), Integer.parseInt(t2.getText()), tStraniero.getText())));
+                else
+                    sq.setIndexInseriti(sq.aggGioc(new Giocatore(t1.getText(), isCapitano(c1), Integer.parseInt(t2.getText()))));
                 insertBox.getChildren().clear();
                 labelIn.setText("INSERITO CORRETTAMENTE");
             });
@@ -82,11 +82,6 @@ public class HelloController {
     }
 
     @FXML
-    public boolean isStraniero(Button cStraniero){
-        return !insertBox.getChildren().contains(cStraniero);
-    }
-
-    @FXML
     public void vediGioc() {
         insertBox.getChildren().clear();
         if (sq.getIndexInseriti() == 0) {
@@ -95,7 +90,7 @@ public class HelloController {
         } else {
             labelIn.setStyle("-fx-text-fill: #0a0a0a");
             labelIn.setText("GIOCATORI DELLA SQUADRA:");
-            Label l1=new Label(sq.stampa());
+            Label l1=new Label(sq.toString());
             insertBox.getChildren().add(l1);
         }
     }
@@ -148,7 +143,7 @@ public class HelloController {
                 Button b1=new Button("Ricerca");
                 insertBox.getChildren().add(b1);
                 b1.setOnMouseClicked( e -> { //All'azione
-                    if (isStraniero(cStraniero))
+                    if (!insertBox.getChildren().contains(cStraniero))
                         i=sq.ricercaGioc(new GiocatoreStraniero(t1.getText(), isCapitano(c1), Integer.parseInt(t2.getText()),tStraniero.getText()));
                     else
                         i=sq.ricercaGioc(new Giocatore(t1.getText(), isCapitano(c1), Integer.parseInt(t2.getText())));
@@ -163,7 +158,7 @@ public class HelloController {
 
                         //Cotrollo se è un capitano o no
                         boolean controlloCapitano,isStraniero;
-                        if (isStraniero(cStraniero)) {
+                        if (!insertBox.getChildren().contains(cStraniero)) {
                             controlloCapitano = sq.isCapitanoSingolo(sq.ricercaGioc(new GiocatoreStraniero(t1.getText(), isCapitano(c1), Integer.parseInt(t2.getText()), tStraniero.getText())));
                             isStraniero=true;
                         }else {
@@ -260,7 +255,7 @@ public class HelloController {
             Button b1=new Button("Cerca");
             insertBox.getChildren().add(b1);
             b1.setOnMouseClicked( e -> { //All'azione
-                if (isStraniero(cStraniero))
+                if (!insertBox.getChildren().contains(cStraniero))
                     i=sq.ricercaGioc(new GiocatoreStraniero(t1.getText(), isCapitano(c1), Integer.parseInt(t2.getText()),tStraniero.getText()));
                 else
                     i=sq.ricercaGioc(new Giocatore(t1.getText(), isCapitano(c1), Integer.parseInt(t2.getText())));
@@ -325,7 +320,7 @@ public class HelloController {
             if (i==-1)
                 l1.setText("Non ci sono capitani");
             else
-                l1.setText(sq.toString(i));
+                l1.setText(sq.getGiocatore(i).toString());
         }
     }
     @FXML
@@ -346,7 +341,7 @@ public class HelloController {
                 l1.setText("Ci sono già capitani");
             else
                 l1.setText("Capitano nuovo:");
-            l2.setText(sq.toString(sq.controllaCapitani()));
+            l2.setText(sq.getGiocatore(sq.controllaCapitani()).toString());
         }
     }
 }

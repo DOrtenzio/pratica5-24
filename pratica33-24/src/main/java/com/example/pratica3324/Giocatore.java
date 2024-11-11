@@ -19,12 +19,12 @@ public class Giocatore {
     }
     public void setNome(String nome) { this.nome = nome; }
 
-    //To string
+    @Override
     public String toString() {
         return "GIOCATORE:\t Nome "+getNome()+"\t Gol: "+getGoal()+"\t E' Capitano? "+isCapitano();
     }
 
-    //Equals
+    @Override
     public boolean equals(Object obj) {
         if (obj instanceof Giocatore){
             Giocatore r=(Giocatore) obj;

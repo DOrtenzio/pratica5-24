@@ -17,12 +17,34 @@ public class Squadra {
     public void setIndexInseriti(int indexInseriti) { this.indexInseriti = indexInseriti; }
     public int getSquadraLength() { return this.squadra.length; }
     public boolean isCapitanoSingolo(int indice) { return this.squadra[indice].isCapitano(); }
+    public Giocatore getGiocatore(int indice){ return this.squadra[indice]; }
 
-    //Metodi
-    public String toString(int indice) {
-        return this.squadra[indice].toString();
+    /* METODI */
+
+    //ToString() o stampa() della squadra
+    @Override
+    public String toString() {
+        String s="Squadra: \n";
+        for (int i=0;i<this.indexInseriti;i++){
+            s=s+this.squadra[i].toString()+"\n";
+        }
+        s=s+"\n----------";
+        return s;
     }
 
+    //Aggiunta dei giocatori
+    public int aggGioc(Object obj) {
+        if (obj instanceof GiocatoreStraniero) {
+            this.squadra[indexInseriti]= (GiocatoreStraniero) obj;
+            return this.indexInseriti + 1;
+        } else if (obj instanceof Giocatore){
+            this.squadra[indexInseriti]= (Giocatore) obj;
+            return this.indexInseriti + 1;
+        }
+        return this.indexInseriti;
+    }
+
+    /*
     public int aggGioc(String nome, int gol, boolean capitano) {
         this.squadra[indexInseriti] = new Giocatore(nome, capitano, gol);
         return this.indexInseriti + 1;
@@ -31,15 +53,7 @@ public class Squadra {
         this.squadra[indexInseriti] = new GiocatoreStraniero(nome, capitano, gol,nazionalita);
         return this.indexInseriti + 1;
     }
-
-    public String stampa(){
-        String s="Squadra: \n";
-        for (int i=0;i<this.indexInseriti;i++){
-            s=s+this.squadra[i].toString()+"\n";
-        }
-        s=s+"\n----------";
-        return s;
-    }
+    */
 
     public int ricercaGioc(Object obj){
         if (obj instanceof GiocatoreStraniero) {
@@ -68,14 +82,16 @@ public class Squadra {
             GiocatoreStraniero r = (GiocatoreStraniero) obj;
             GiocatoreStraniero giocatoreStraniero = (GiocatoreStraniero) (this.squadra[indice]);
 
+            //Modifica dei valori
             giocatoreStraniero.setNome(r.getNome());
             giocatoreStraniero.setGoal(r.getGoal());
             giocatoreStraniero.setCapitano(r.isCapitano());
             giocatoreStraniero.setNazionalita(r.getNazionalita());
         }else if(obj instanceof Giocatore){
             Giocatore r = (Giocatore) obj;
-            Giocatore giocatore= this.squadra[indice];
+            Giocatore giocatore= (Giocatore) (this.squadra[indice]);
 
+            //Modifica dei valori
             giocatore.setNome(r.getNome());
             giocatore.setGoal(r.getGoal());
             giocatore.setCapitano(r.isCapitano());
