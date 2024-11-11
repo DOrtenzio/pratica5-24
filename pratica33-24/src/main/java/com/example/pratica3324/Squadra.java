@@ -33,15 +33,14 @@ public class Squadra {
     }
 
     //Aggiunta dei giocatori
-    public int aggGioc(Object obj) {
+    public void aggGioc(Object obj) {
         if (obj instanceof GiocatoreStraniero) {
             this.squadra[indexInseriti]= (GiocatoreStraniero) obj;
-            return this.indexInseriti + 1;
+            this.indexInseriti++;
         } else if (obj instanceof Giocatore){
             this.squadra[indexInseriti]= (Giocatore) obj;
-            return this.indexInseriti + 1;
+            this.indexInseriti++;
         }
-        return this.indexInseriti;
     }
 
     /*

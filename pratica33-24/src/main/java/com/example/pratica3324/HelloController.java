@@ -64,9 +64,9 @@ public class HelloController {
             insertBox.getChildren().add(b1);
             b1.setOnMouseClicked( e -> {
                 if (!insertBox.getChildren().contains(cStraniero))
-                    sq.setIndexInseriti(sq.aggGioc(new GiocatoreStraniero(t1.getText(), isCapitano(c1), Integer.parseInt(t2.getText()), tStraniero.getText())));
+                    sq.aggGioc(new GiocatoreStraniero(t1.getText(), isCapitano(c1), Integer.parseInt(t2.getText()), tStraniero.getText()));
                 else
-                    sq.setIndexInseriti(sq.aggGioc(new Giocatore(t1.getText(), isCapitano(c1), Integer.parseInt(t2.getText()))));
+                    sq.aggGioc(new Giocatore(t1.getText(), isCapitano(c1), Integer.parseInt(t2.getText())));
                 insertBox.getChildren().clear();
                 labelIn.setText("INSERITO CORRETTAMENTE");
             });

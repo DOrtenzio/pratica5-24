@@ -11,12 +11,7 @@ public class Giocatore {
     public boolean isCapitano() { return capitano; }
 
     public void setCapitano(boolean capitano) { this.capitano = capitano; }
-    public void setGoal(int goal) {
-        if(goal<0)
-            this.goal = 0;
-        else
-            this.goal=goal;
-    }
+    public void setGoal(int goal) { this.goal = Math.max(goal, 0); }
     public void setNome(String nome) { this.nome = nome; }
 
     @Override
